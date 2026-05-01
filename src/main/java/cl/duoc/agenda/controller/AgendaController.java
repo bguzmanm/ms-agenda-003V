@@ -1,10 +1,7 @@
 package cl.duoc.agenda.controller;
 
 import cl.duoc.agenda.dto.AgendaResponseDto;
-import cl.duoc.agenda.dto.PatientResponseDto;
 import cl.duoc.agenda.service.AgendaService;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +27,17 @@ public class AgendaController {
 
     @GetMapping("/by-patient/{patientId}")
     public ResponseEntity<List<AgendaResponseDto>> findByPatientId(@PathVariable Long patientId) {
+        List<AgendaResponseDto> agendaResponseDto = service.findByPatientId(patientId);
+
+        if (agendaResponseDto == null || agendaResponseDto.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.ok(service.findByPatientId(patientId));
+    }
+
+    @GetMapping("/by-doctor/{doctorId}")
+    public ResponseEntity<List<AgendaResponseDto>> findByDoctorId(@PathVariable Long doctorId) {
+        return ResponseEntity.ok(service.findByDoctorId(doctorId));
     }
 }
