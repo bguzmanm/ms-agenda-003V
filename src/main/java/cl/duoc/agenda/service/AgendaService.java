@@ -8,7 +8,7 @@ import java.util.List;
 public interface AgendaService {
     List<AgendaResponseDto> findAll();
     AgendaResponseDto findById(Long id);
-    List<AgendaResponseDto> findByPatientId(Long patientId);
+    List<AgendaResponseDto> findByPatientId(Long patientId) throws Exception;
     List<AgendaResponseDto> findByDoctorId(Long doctorId);
     List<AgendaResponseDto> findByPatientIdAndDoctorId(Long patientId, Long doctorId);
 }

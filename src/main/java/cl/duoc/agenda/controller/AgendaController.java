@@ -2,6 +2,8 @@ package cl.duoc.agenda.controller;
 
 import cl.duoc.agenda.dto.AgendaResponseDto;
 import cl.duoc.agenda.service.AgendaService;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/agendas")
+@Log4j2
 public class AgendaController {
 
     private final AgendaService service;
@@ -26,14 +29,15 @@ public class AgendaController {
     }
 
     @GetMapping("/by-patient/{patientId}")
-    public ResponseEntity<List<AgendaResponseDto>> findByPatientId(@PathVariable Long patientId) {
-        List<AgendaResponseDto> agendaResponseDto = service.findByPatientId(patientId);
+    public ResponseEntity<List<AgendaResponseDto>> findByPatientId(@PathVariable Long patientId) throws Exception {
 
-        if (agendaResponseDto == null || agendaResponseDto.isEmpty()) {
+        try {
+            List<AgendaResponseDto> agendaResponseDto = service.findByPatientId(patientId);
+            return ResponseEntity.ok(service.findByPatientId(patientId));
+
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.ok(service.findByPatientId(patientId));
     }
 
     @GetMapping("/by-doctor/{doctorId}")

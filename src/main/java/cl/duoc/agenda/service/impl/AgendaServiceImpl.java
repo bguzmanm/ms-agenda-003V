@@ -2,6 +2,7 @@ package cl.duoc.agenda.service.impl;
 
 import cl.duoc.agenda.dto.AgendaResponseDto;
 import cl.duoc.agenda.dto.DoctorResponseDto;
+import cl.duoc.agenda.dto.ExceptionDto;
 import cl.duoc.agenda.dto.PatientResponseDto;
 import cl.duoc.agenda.model.Agenda;
 import cl.duoc.agenda.repository.AgendaRepository;
@@ -55,19 +56,24 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public List<AgendaResponseDto> findByPatientId(Long patientId) {
+    public List<AgendaResponseDto> findByPatientId(Long patientId) throws Exception {
         // validar que el id de paciente exista en el servicio de paciente.
+        log.info("Buscando al paciente {}", patientId);
         try {
             PatientResponseDto p = patient.findById(patientId);
+            log.info(p);
             if (p == null) {
                 log.warn("Patient with id {} not found", patientId);
                 return null;
             }
             return repository.findByPatientId(patientId).stream().map(this::toDto).toList();
+
         } catch (Exception e) {
+
             log.error(e.getMessage());
-            return null;
+            throw new Exception(e.getMessage());
         }
+
     }
 
     @Override
